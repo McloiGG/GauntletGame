@@ -1,4 +1,6 @@
 #pragma once
+#ifndef VIRTUAL_SCREEN_HPP
+#define VIRTUAL_SCREEN_HPP
 
 #include <algorithm>
 #include "raylib.h"
@@ -23,3 +25,5 @@ private:
 	Rectangle		p_destination{};
 	float 			p_scale{1.0f};
 };
+
+#endif
