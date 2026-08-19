@@ -1,29 +1,32 @@
 #pragma once
-#ifndef VIRTUAL_SCREEN_HPP
-#define VIRTUAL_SCREEN_HPP
+#ifndef VIRTUALSCREEN_HPP
+#define VIRTUALSCREEN_HPP
 
 #include <algorithm>
 #include "raylib.h"
 
-class VirtualScreen
+namespace engine
 {
-public:
-	VirtualScreen(int gameWidth, int gameHeight);
-	~VirtualScreen();
-	VirtualScreen(const VirtualScreen&) = delete;
-	VirtualScreen& operator=(const VirtualScreen&) = delete;
+	class VirtualScreen
+	{
+	public:
+		VirtualScreen(int gameWidth, int gameHeight);
+		~VirtualScreen();
+		VirtualScreen(const VirtualScreen&) = delete;
+		VirtualScreen& operator=(const VirtualScreen&) = delete;
 
-	void	update();
-	void	beginGameDrawing() const;
-	void	endGameDrawing() const;
-	Vector2	screenToGame(Vector2 screenPosition) const;
+		void	update();
+		void	beginGameDrawing() const;
+		void	endGameDrawing() const;
+		Vector2	screenToGame(Vector2 screenPosition) const;
 
-private:
-	int				p_gameW;
-	int				p_gameH;
-	RenderTexture2D	p_target;
-	Rectangle		p_destination{};
-	float 			p_scale{1.0f};
-};
+	private:
+		int				m_gameW;
+		int				m_gameH;
+		RenderTexture2D	m_target;
+		Rectangle		m_destination{};
+		float 			m_scale{1.0f};
+	};
+}
 
 #endif

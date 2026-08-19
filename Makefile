@@ -7,7 +7,7 @@ SRC_DIR = src
 SRC_FILES = main.cpp
 
 ENGINE_DIR = engine
-ENGINE_FILES = VirtualScreen.cpp
+ENGINE_FILES = VirtualScreen.cpp Window.cpp FrameClock.cpp
 
 GAME_DIR = game
 GAME_FILES =
