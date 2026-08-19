@@ -2,7 +2,6 @@
 #ifndef VIRTUALSCREEN_HPP
 #define VIRTUALSCREEN_HPP
 
-#include <algorithm>
 #include "raylib.h"
 
 namespace engine

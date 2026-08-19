@@ -42,15 +42,34 @@ namespace engine::ecs
 			return getPool<Component>().tryGet(entity);
 		}
 
+		template<typename Component>
+		const Component*	tryGetComponent(Entity entity) const
+		{
+			return getPool<Component>().tryGet(entity);
+		}
+
 		template<typename First, typename Second, typename Function>
 		void	each(Function&& function)
 		{
-			auto&	secondPool = getPool<Second>();
+			eachMatching<First, Second>(*this, std::forward<Function>(function));
+		}
 
-			getPool<First>().each(
-				[&secondPool, &function](Entity entity, First& first)
+		template<typename First, typename Second, typename Function>
+		void	each(Function&& function) const
+		{
+			eachMatching<First, Second>(*this, std::forward<Function>(function));
+		}
+
+	private:
+		template<typename First, typename Second, typename RegistryType, typename Function>
+		static void	eachMatching(RegistryType& registry, Function&& function)
+		{
+			auto&	secondPool = registry.template getPool<Second>();
+
+			registry.template getPool<First>().each(
+				[&secondPool, &function](Entity entity, auto& first)
 				{
-					Second*	second = secondPool.tryGet(entity);
+					auto*	second = secondPool.tryGet(entity);
 
 					if (second != nullptr)
 						function(entity, first, *second);
@@ -58,9 +77,14 @@ namespace engine::ecs
 			);
 		}
 
-	private:
 		template<typename Component>
 		ComponentPool<Component>&	getPool()
+		{
+			return std::get<ComponentPool<Component>>(m_componentPools);
+		}
+
+		template<typename Component>
+		const ComponentPool<Component>&	getPool() const
 		{
 			return std::get<ComponentPool<Component>>(m_componentPools);
 		}

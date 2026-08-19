@@ -1,0 +1,44 @@
+#include "Random.hpp"
+#include <algorithm>
+#include <cassert>
+
+namespace engine
+{
+	Random::Random(std::uint32_t seed) : m_engine(seed) {}
+
+	int	Random::integer(int minimum, int maximum)
+	{
+		assert(minimum <= maximum);
+		std::uniform_int_distribution<int>	distribution(minimum, maximum);
+
+		return distribution(m_engine);
+	}
+
+	float	Random::real(float minimum, float maximum)
+	{
+		assert(minimum <= maximum);
+		std::uniform_real_distribution<float>	distribution(minimum, maximum);
+
+		return distribution(m_engine);
+	}
+
+	bool	Random::chance(float probability)
+	{
+		assert(probability >= 0.0f && probability <= 1.0f);
+		std::bernoulli_distribution	distribution(probability);
+
+		return distribution(m_engine);
+	}
+
+	std::size_t	Random::weightedIndex(const std::vector<float>& weights)
+	{
+		assert(!weights.empty());
+		assert(std::all_of(weights.begin(), weights.end(),
+			[](float weight) { return weight >= 0.0f; }));
+		assert(std::any_of(weights.begin(), weights.end(),
+			[](float weight) { return weight > 0.0f; }));
+		std::discrete_distribution<std::size_t>	distribution(weights.begin(), weights.end());
+
+		return distribution(m_engine);
+	}
+}

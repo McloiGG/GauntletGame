@@ -57,39 +57,49 @@ namespace engine::ecs
 
 		Component*	tryGet(Entity entity)
 		{
-			const auto	found = m_entityToIndex.find(entity);
+			const std::size_t*	index = findIndex(entity);
 
-			if (found == m_entityToIndex.end())
-				return nullptr;
-
-			return &m_components[found->second];
+			return index != nullptr ? &m_components[*index] : nullptr;
 		}
 
 		const Component*	tryGet(Entity entity) const
 		{
-			const auto	found = m_entityToIndex.find(entity);
+			const std::size_t*	index = findIndex(entity);
 
-			if (found == m_entityToIndex.end())
-				return nullptr;
-
-			return &m_components[found->second];
+			return index != nullptr ? &m_components[*index] : nullptr;
 		}
 
 		template<typename Function>
 		void	each(Function&& function)
 		{
-			for (std::size_t index = 0; index < m_components.size(); ++index)
-				function(m_entities[index], m_components[index]);
+			eachComponent(m_components, m_entities, std::forward<Function>(function));
 		}
 
 		template<typename Function>
 		void	each(Function&& function) const
 		{
-			for (std::size_t index = 0; index < m_components.size(); ++index)
-				function(m_entities[index], m_components[index]);
+			eachComponent(m_components, m_entities, std::forward<Function>(function));
 		}
 
 	private:
+		const std::size_t*	findIndex(Entity entity) const
+		{
+			const auto	found = m_entityToIndex.find(entity);
+
+			return found != m_entityToIndex.end() ? &found->second : nullptr;
+		}
+
+		template<typename ComponentCollection, typename Function>
+		static void	eachComponent(
+			ComponentCollection& components,
+			const std::vector<Entity>& entities,
+			Function&& function
+		)
+		{
+			for (std::size_t index = 0; index < components.size(); ++index)
+				function(entities[index], components[index]);
+		}
+
 		std::vector<Component>					m_components;
 		std::vector<Entity>						m_entities;
 		std::unordered_map<Entity, std::size_t>	m_entityToIndex;

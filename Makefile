@@ -1,4 +1,4 @@
-NAME = game
+NAME = weave
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -Wpedantic -std=c++17 -g
@@ -7,10 +7,13 @@ SRC_DIR = src
 SRC_FILES = main.cpp
 
 ENGINE_DIR = engine
-ENGINE_FILES = VirtualScreen.cpp Window.cpp FrameClock.cpp
+ENGINE_FILES = VirtualScreen.cpp Window.cpp FrameClock.cpp Random.cpp \
+	collision/Intersections.cpp
 
 GAME_DIR = game
-GAME_FILES =
+GAME_FILES = Game.cpp field/FieldLayout.cpp field/FieldGenerator.cpp \
+	systems/PlayerInputSystem.cpp systems/MovementSystem.cpp \
+	systems/DefenderMovementSystem.cpp systems/CollisionSystem.cpp
 
 MODULES = ENGINE GAME
 

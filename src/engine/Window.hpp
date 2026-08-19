@@ -2,7 +2,6 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-#include <vector>
 #include <string>
 
 namespace engine

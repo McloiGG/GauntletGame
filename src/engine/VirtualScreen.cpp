@@ -1,4 +1,5 @@
 #include "VirtualScreen.hpp"
+#include <algorithm>
 
 namespace engine
 {
