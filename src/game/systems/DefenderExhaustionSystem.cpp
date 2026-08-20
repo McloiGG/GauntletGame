@@ -22,10 +22,7 @@ namespace game
 			return {stunnedWeight, normalWeight, fastWeight, fullWeight};
 		}
 
-		DefenderRecoveryOutcome	chooseRecoveryOutcome(
-			engine::Random& random,
-			const RoundDifficulty& difficulty
-		)
+		DefenderRecoveryOutcome	chooseRecoveryOutcome(engine::Random& random, const RoundDifficulty& difficulty)
 		{
 			switch (random.weightedIndex(recoveryOutcomeWeights(difficulty)))
 			{
@@ -41,23 +38,11 @@ namespace game
 		}
 	}
 
-	void	DefenderExhaustionSystem::update(
-		World& world,
-		engine::Random& random,
-		const RoundDifficulty& difficulty,
-		float deltaTime
-	) const
+	void	DefenderExhaustionSystem::update(World& world, engine::Random& random, const RoundDifficulty& difficulty) const
 	{
-		const float	elapsed = std::max(0.0f, deltaTime);
-
 		world.each<Stamina, DefenderStatus>(
-			[&random, &difficulty, elapsed](
-				engine::ecs::Entity,
-				Stamina& stamina,
-				DefenderStatus& status
-			)
+			[&random, &difficulty](engine::ecs::Entity, Stamina& stamina, DefenderStatus& status)
 			{
-				status.stunRemaining = std::max(0.0f, status.stunRemaining - elapsed);
 				if (!stamina.exhausted)
 				{
 					status.exhaustionOutcomeResolved = false;
@@ -73,10 +58,7 @@ namespace game
 				switch (status.recoveryOutcome)
 				{
 				case DefenderRecoveryOutcome::Stunned:
-					status.stunRemaining = std::max(
-						status.stunRemaining,
-						config::defender::exhaustionStunDuration
-					);
+					status.stunRemaining = std::max(status.stunRemaining, config::defender::exhaustionStunDuration);
 					break;
 				case DefenderRecoveryOutcome::FastRecovery:
 					stamina.recoveryMultiplier = config::defender::fastRecoveryMultiplier;

@@ -11,12 +11,7 @@ namespace game
 	class DefenderExhaustionSystem
 	{
 	public:
-		void	update(
-			World& world,
-			engine::Random& random,
-			const RoundDifficulty& difficulty,
-			float deltaTime
-		) const;
+		void	update(World& world, engine::Random& random, const RoundDifficulty& difficulty) const;
 	};
 }
 

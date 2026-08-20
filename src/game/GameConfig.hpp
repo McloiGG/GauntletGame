@@ -55,6 +55,9 @@ namespace game::config
 		inline constexpr float	sprintSpeed = 100.0f;
 		inline constexpr float	exhaustedSpeed = 32.0f;
 		inline constexpr float	colliderRadius = 12.0f;
+		inline constexpr float	collisionBumpDistance = 10.0f;
+		inline constexpr float	collisionStunDuration = 0.45f;
+		inline constexpr float	collisionCooldown = 1.5f;
 		inline constexpr float	minimumSprintTravelDistance = 24.0f;
 		inline constexpr float	longitudinalSprintProximity = 48.0f;
 		inline constexpr float	transverseSprintProximity = 40.0f;
@@ -162,6 +165,9 @@ namespace game::config
 	static_assert(defender::longitudinalSprintProximity >= 0.0f &&
 		defender::transverseSprintProximity >= 0.0f && defender::minimumSprintTravelDistance >= 0.0f,
 		"Defender sprint distances cannot be negative");
+	static_assert(defender::collisionBumpDistance >= 0.0f &&
+		defender::collisionStunDuration >= 0.0f && defender::collisionCooldown >= 0.0f,
+		"Defender collision response values cannot be negative");
 	static_assert(defender::stunnedOutcomeWeight + defender::normalRecoveryOutcomeWeight +
 		defender::fastRecoveryOutcomeWeight + defender::fullRecoveryOutcomeWeight == 100.0f,
 		"Base defender recovery outcome weights must total 100 percent");

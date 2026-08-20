@@ -17,6 +17,7 @@ namespace game
 	{
 		DefenderRecoveryOutcome	recoveryOutcome{DefenderRecoveryOutcome::None};
 		float					stunRemaining{};
+		float					collisionCooldownRemaining{};
 		bool					exhaustionOutcomeResolved{false};
 	};
 }

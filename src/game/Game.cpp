@@ -272,10 +272,11 @@ namespace game
 
 	void	Game::updatePlaying(float deltaTime)
 	{
+		m_defenderStatusSystem.update(m_world, deltaTime);
 		m_playerInputSystem.update(m_world);
 		m_defenderIntentSystem.update(m_world, m_field, m_player);
 		m_staminaSystem.update(m_world, deltaTime);
-		m_defenderExhaustionSystem.update(m_world, m_enemyRandom, m_difficulty, deltaTime);
+		m_defenderExhaustionSystem.update(m_world, m_enemyRandom, m_difficulty);
 		m_playerVelocitySystem.update(m_world);
 		m_movementSystem.update(m_world, deltaTime);
 		clampPlayerToCourt();
@@ -294,7 +295,9 @@ namespace game
 			m_phaseTimer = config::round::completeDelay;
 			return;
 		}
-		updateCollisions();
+		m_collisionSystem.update(m_world);
+		m_defenderCollisionSystem.update(m_world, m_field, m_defenders, m_collisionSystem);
+		updatePlayerCollision();
 		if (m_playerHit)
 			enterGameOver();
 	}
@@ -351,9 +354,8 @@ namespace game
 			m_roundState = RoundState::Complete;
 	}
 
-	void	Game::updateCollisions()
+	void	Game::updatePlayerCollision()
 	{
-		m_collisionSystem.update(m_world);
 		m_playerHit = false;
 		if (m_playerSafeZone != field::SafeZone::None)
 			return;

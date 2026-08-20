@@ -12,9 +12,11 @@
 #include "field/FieldLayout.hpp"
 #include "persistence/HighScoreStore.hpp"
 #include "systems/CollisionSystem.hpp"
+#include "systems/DefenderCollisionSystem.hpp"
 #include "systems/DefenderExhaustionSystem.hpp"
 #include "systems/DefenderIntentSystem.hpp"
 #include "systems/DefenderMovementSystem.hpp"
+#include "systems/DefenderStatusSystem.hpp"
 #include "systems/MovementSystem.hpp"
 #include "systems/PlayerInputSystem.hpp"
 #include "systems/PlayerVelocitySystem.hpp"
@@ -43,7 +45,7 @@ namespace game
 		bool	updatePhaseTimer(float deltaTime);
 		void	clampPlayerToCourt();
 		void	updateRoundProgress();
-		void	updateCollisions();
+		void	updatePlayerCollision();
 		void	enterGameOver();
 		void	renderPlayfield() const;
 		void	renderHud() const;
@@ -73,6 +75,7 @@ namespace game
 		bool								m_playerHit{false};
 		bool								m_newHighScore{false};
 		bool								m_highScoreSaveFailed{false};
+		DefenderStatusSystem				m_defenderStatusSystem;
 		PlayerInputSystem					m_playerInputSystem;
 		DefenderIntentSystem				m_defenderIntentSystem;
 		StaminaSystem						m_staminaSystem;
@@ -81,6 +84,7 @@ namespace game
 		MovementSystem						m_movementSystem;
 		DefenderMovementSystem				m_defenderMovementSystem;
 		CollisionSystem						m_collisionSystem;
+		DefenderCollisionSystem				m_defenderCollisionSystem;
 	};
 }
 

@@ -15,9 +15,10 @@ GAME_FILES = Game.cpp field/FieldLayout.cpp field/FieldGenerator.cpp \
 	persistence/HighScoreStore.cpp \
 	systems/PlayerInputSystem.cpp systems/StaminaSystem.cpp \
 	systems/PlayerVelocitySystem.cpp systems/MovementSystem.cpp \
-	systems/DefenderIntentSystem.cpp systems/DefenderExhaustionSystem.cpp \
+	systems/DefenderStatusSystem.cpp systems/DefenderIntentSystem.cpp \
+	systems/DefenderExhaustionSystem.cpp \
 	systems/DefenderMovementSystem.cpp \
-	systems/CollisionSystem.cpp
+	systems/CollisionSystem.cpp systems/DefenderCollisionSystem.cpp
 
 MODULES = ENGINE GAME
 
