@@ -1,5 +1,4 @@
 #include "Random.hpp"
-#include <algorithm>
 #include <cassert>
 
 namespace engine
@@ -38,18 +37,6 @@ namespace engine
 	{
 		assert(probability >= 0.0f && probability <= 1.0f);
 		std::bernoulli_distribution	distribution(probability);
-
-		return distribution(m_engine);
-	}
-
-	std::size_t	Random::weightedIndex(const std::vector<float>& weights)
-	{
-		assert(!weights.empty());
-		assert(std::all_of(weights.begin(), weights.end(),
-			[](float weight) { return weight >= 0.0f; }));
-		assert(std::any_of(weights.begin(), weights.end(),
-			[](float weight) { return weight > 0.0f; }));
-		std::discrete_distribution<std::size_t>	distribution(weights.begin(), weights.end());
 
 		return distribution(m_engine);
 	}

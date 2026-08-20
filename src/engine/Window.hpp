@@ -9,10 +9,15 @@ namespace engine
 	class Window
 	{
 	public:
-		Window(int width, int height, const std::string& title, unsigned flags);
-		~Window();
+		Window(int width, int height, std::string title, unsigned flags);
+		~Window() noexcept;
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
+		Window(Window&&) = delete;
+		Window& operator=(Window&&) = delete;
+
+	private:
+		std::string	m_title;
 	};
 }
 

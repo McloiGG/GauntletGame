@@ -1,13 +1,13 @@
 #include "DefenderExhaustionSystem.hpp"
 #include "game/GameConfig.hpp"
 #include <algorithm>
-#include <vector>
+#include <array>
 
 namespace game
 {
 	namespace
 	{
-		std::vector<float>	recoveryOutcomeWeights(const RoundDifficulty& difficulty)
+		std::array<float, 4>	recoveryOutcomeWeights(const RoundDifficulty& difficulty)
 		{
 			const float	shift = std::max(0.0f, difficulty.enemyOutcomeWeightShift);
 			const float	stunnedWeight = std::max(config::defender::minimumStunnedOutcomeWeight,

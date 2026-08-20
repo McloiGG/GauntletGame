@@ -1,7 +1,8 @@
 #include "HighScoreStore.hpp"
-#include <charconv>
+#include <cctype>
+#include <cstddef>
 #include <fstream>
-#include <string>
+#include <limits>
 #include <system_error>
 #include <utility>
 
@@ -11,25 +12,40 @@ namespace game::persistence
 
 	std::uint32_t	HighScoreStore::load() const
 	{
-		std::ifstream	input{m_path};
-		std::string		serializedScore;
+		std::ifstream			input{m_path};
+		std::uint32_t			score{};
+		std::size_t				digitCount{};
+		bool					hasDigit{false};
+		bool					hasTrailingWhitespace{false};
+		char					character{};
+		constexpr std::size_t	maximumDigitCount = std::numeric_limits<std::uint32_t>::digits10 + 1;
+		constexpr std::uint32_t	maximumScore = std::numeric_limits<std::uint32_t>::max();
 
-		if (!(input >> serializedScore))
+		while (input.get(character))
+		{
+			if (std::isspace(static_cast<unsigned char>(character)) != 0)
+			{
+				if (hasDigit)
+					hasTrailingWhitespace = true;
+				continue;
+			}
+			if (hasTrailingWhitespace || character < '0' || character > '9')
+				return 0;
+
+			hasDigit = true;
+			if (++digitCount > maximumDigitCount)
+				return 0;
+
+			const std::uint32_t	digit = static_cast<std::uint32_t>(character - '0');
+
+			if (score > (maximumScore - digit) / 10)
+				return 0;
+			score = score * 10 + digit;
+		}
+
+		if (input.bad() || !input.eof())
 			return 0;
-
-		input >> std::ws;
-		if (!input.eof())
-			return 0;
-
-		std::uint32_t	score{};
-		const char*		begin = serializedScore.data();
-		const char*		end = begin + serializedScore.size();
-		const auto		result = std::from_chars(begin, end, score);
-
-		if (result.ec != std::errc{} || result.ptr != end)
-			return 0;
-
-		return score;
+		return hasDigit ? score : 0;
 	}
 
 	bool	HighScoreStore::save(std::uint32_t score) const
