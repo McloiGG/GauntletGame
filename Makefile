@@ -12,6 +12,7 @@ ENGINE_FILES = VirtualScreen.cpp Window.cpp FrameClock.cpp Random.cpp \
 
 GAME_DIR = game
 GAME_FILES = Game.cpp field/FieldLayout.cpp field/FieldGenerator.cpp \
+	persistence/HighScoreStore.cpp \
 	systems/PlayerInputSystem.cpp systems/MovementSystem.cpp \
 	systems/DefenderMovementSystem.cpp systems/CollisionSystem.cpp
 

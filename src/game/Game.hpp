@@ -2,12 +2,14 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "GameConfig.hpp"
 #include "GamePhase.hpp"
 #include "RoundDifficulty.hpp"
 #include "RoundState.hpp"
 #include "World.hpp"
 #include "field/FieldGenerator.hpp"
 #include "field/FieldLayout.hpp"
+#include "persistence/HighScoreStore.hpp"
 #include "systems/CollisionSystem.hpp"
 #include "systems/DefenderMovementSystem.hpp"
 #include "systems/MovementSystem.hpp"
@@ -24,6 +26,8 @@ namespace game
 
 		void	update(float deltaTime);
 		void	render() const;
+		bool	isGameOver() const;
+		void	startNewRun(std::uint32_t seed);
 
 	private:
 		void	startRound();
@@ -35,25 +39,31 @@ namespace game
 		void	clampPlayerToCourt();
 		void	updateRoundProgress();
 		void	updateCollisions();
+		void	enterGameOver();
 
-		field::FieldConfig		m_fieldConfig;
-		field::FieldGenerator	m_fieldGenerator;
-		field::FieldLayout		m_field;
-		World					m_world;
-		engine::ecs::Entity		m_player{};
+		field::FieldConfig					m_fieldConfig;
+		field::FieldGenerator				m_fieldGenerator;
+		persistence::HighScoreStore			m_highScoreStore{config::persistence::highScorePath};
+		field::FieldLayout					m_field;
+		World								m_world;
+		engine::ecs::Entity					m_player{};
 		std::vector<engine::ecs::Entity>	m_defenders;
-		GamePhase				m_gamePhase{GamePhase::Playing};
-		float					m_phaseTimer{};
-		std::uint32_t			m_roundNumber{1};
-		std::uint32_t			m_baseSeed{};
-		RoundDifficulty			m_difficulty;
-		RoundState				m_roundState{RoundState::GoingToOppositeSide};
-		field::SafeZone			m_playerSafeZone{field::SafeZone::Start};
-		bool					m_playerHit{false};
-		PlayerInputSystem		m_playerInputSystem;
-		MovementSystem			m_movementSystem;
-		DefenderMovementSystem	m_defenderMovementSystem;
-		CollisionSystem			m_collisionSystem;
+		GamePhase							m_gamePhase{GamePhase::Playing};
+		float								m_phaseTimer{};
+		std::uint32_t						m_roundNumber{1};
+		std::uint32_t						m_baseSeed{};
+		std::uint32_t						m_completedRounds{};
+		std::uint32_t						m_highScore{};
+		RoundDifficulty						m_difficulty;
+		RoundState							m_roundState{RoundState::GoingToOppositeSide};
+		field::SafeZone						m_playerSafeZone{field::SafeZone::Start};
+		bool								m_playerHit{false};
+		bool								m_newHighScore{false};
+		bool								m_highScoreSaveFailed{false};
+		PlayerInputSystem					m_playerInputSystem;
+		MovementSystem						m_movementSystem;
+		DefenderMovementSystem				m_defenderMovementSystem;
+		CollisionSystem						m_collisionSystem;
 	};
 }
 

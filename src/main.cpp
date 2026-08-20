@@ -34,9 +34,15 @@ int main()
 
 		while (!WindowShouldClose())
 		{
-
 			frameClock.update();
 			virtualScreen.update();
+			if (game.isGameOver() && IsKeyPressed(KEY_ENTER))
+			{
+				const std::uint32_t	newSeed =
+					static_cast<std::uint32_t>(randomDevice());
+
+				game.startNewRun(newSeed);
+			}
 
 			game.update(frameClock.deltaSeconds());
 

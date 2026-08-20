@@ -82,6 +82,26 @@ namespace game
 	Game::Game(field::FieldConfig fieldConfig, std::uint32_t baseSeed)
 		: m_fieldConfig(fieldConfig), m_fieldGenerator(baseSeed), m_baseSeed(baseSeed)
 	{
+		m_highScore = m_highScoreStore.load();
+		startRound();
+	}
+
+	bool	Game::isGameOver() const
+	{
+		return m_gamePhase == GamePhase::GameOver;
+	}
+
+	void	Game::startNewRun(std::uint32_t seed)
+	{
+		m_baseSeed = seed;
+		m_fieldGenerator = field::FieldGenerator{seed};
+		m_roundNumber = 1;
+		m_completedRounds = 0;
+		m_phaseTimer = config::round::loadingDuration;
+		m_gamePhase = GamePhase::LoadingNextRound;
+		m_playerHit = false;
+		m_newHighScore = false;
+		m_highScoreSaveFailed = false;
 		startRound();
 	}
 
@@ -155,6 +175,8 @@ namespace game
 		case GamePhase::LoadingNextRound:
 			updateLoadingNextRound(deltaTime);
 			break;
+		case GamePhase::GameOver:
+			break;
 		}
 	}
 
@@ -172,12 +194,15 @@ namespace game
 
 			if (velocity != nullptr)
 				*velocity = {};
+			++m_completedRounds;
 			m_playerHit = false;
 			m_gamePhase = GamePhase::RoundCompleteDelay;
 			m_phaseTimer = config::round::completeDelay;
 			return;
 		}
 		updateCollisions();
+		if (m_playerHit)
+			enterGameOver();
 	}
 
 	void	Game::updateRoundCompleteDelay(float deltaTime)
@@ -249,6 +274,23 @@ namespace game
 		}
 	}
 
+	void	Game::enterGameOver()
+	{
+		Velocity2D*	velocity = m_world.tryGetComponent<Velocity2D>(m_player);
+
+		if (velocity != nullptr)
+			*velocity = {};
+
+		m_newHighScore = m_completedRounds > m_highScore;
+		m_highScoreSaveFailed = false;
+		if (m_newHighScore)
+		{
+			m_highScore = m_completedRounds;
+			m_highScoreSaveFailed = !m_highScoreStore.save(m_highScore);
+		}
+		m_gamePhase = GamePhase::GameOver;
+	}
+
 	void	Game::render() const
 	{
 		if (m_gamePhase == GamePhase::LoadingNextRound)
@@ -295,6 +337,28 @@ namespace game
 				static_cast<int>(m_fieldConfig.worldHeight), Color{0, 0, 0, 150});
 			drawCenteredText("ROUND COMPLETE", 138, 28, GREEN, m_fieldConfig.worldWidth);
 			drawCenteredText("Preparing next round...", 174, 16, RAYWHITE, m_fieldConfig.worldWidth);
+		}
+		else if (m_gamePhase == GamePhase::GameOver)
+		{
+			DrawRectangle(0, 0, static_cast<int>(m_fieldConfig.worldWidth),
+				static_cast<int>(m_fieldConfig.worldHeight), Color{0, 0, 0, 190});
+			drawCenteredText("CAUGHT", 100, 32, RED, m_fieldConfig.worldWidth);
+			drawCenteredText(
+				TextFormat("ROUNDS COMPLETED: %u",
+					static_cast<unsigned int>(m_completedRounds)),
+				150, 18, RAYWHITE, m_fieldConfig.worldWidth
+			);
+			drawCenteredText(
+				TextFormat("HIGH SCORE: %u", static_cast<unsigned int>(m_highScore)),
+				178, 18, m_newHighScore ? GOLD : LIGHTGRAY, m_fieldConfig.worldWidth
+			);
+			if (m_newHighScore)
+				drawCenteredText("NEW HIGH SCORE", 202, 16, GOLD, m_fieldConfig.worldWidth);
+			drawCenteredText("PRESS ENTER TO PLAY AGAIN", 230, 16,
+				RAYWHITE, m_fieldConfig.worldWidth);
+			if (m_highScoreSaveFailed)
+				drawCenteredText("WARNING: HIGH SCORE COULD NOT BE SAVED", 258, 12,
+					ORANGE, m_fieldConfig.worldWidth);
 		}
 	}
 }

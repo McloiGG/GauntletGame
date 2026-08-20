@@ -8,7 +8,8 @@ namespace game
 	{
 		Playing,
 		RoundCompleteDelay,
-		LoadingNextRound
+		LoadingNextRound,
+		GameOver
 	};
 }
 

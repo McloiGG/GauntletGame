@@ -23,7 +23,6 @@ namespace game::config
 		inline constexpr std::size_t	generationAttempts = 8;
 		inline constexpr float			comparisonTolerance = 0.001f;
 
-		// 0 produces straight lines, 1 is the default, and values above 1 amplify variation.
 		inline constexpr float			lineVariationScale = 1.0f;
 		inline constexpr std::size_t	baseInteriorPointCount = 1;
 		inline constexpr std::size_t	maximumInteriorPointCount = 5;
@@ -67,6 +66,11 @@ namespace game::config
 	{
 		inline constexpr float	completeDelay = 1.0f;
 		inline constexpr float	loadingDuration = 0.3f;
+	}
+
+	namespace persistence
+	{
+		inline constexpr char	highScorePath[] = "save/highscore.txt";
 	}
 
 	static_assert(display::logicalWidth > 0 && display::logicalHeight > 0,
