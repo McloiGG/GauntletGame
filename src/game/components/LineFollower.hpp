@@ -11,7 +11,10 @@ namespace game
 		field::FieldLineId	lineId;
 		float				distanceAlongLine{};
 		float				targetDistanceAlongLine{};
-		float				moveSpeed{48.0f};
+		float				walkSpeed{};
+		float				sprintSpeed{};
+		float				exhaustedSpeed{};
+		float				sprintPlayerProximity{};
 	};
 }
 

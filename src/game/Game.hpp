@@ -2,6 +2,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "engine/Random.hpp"
 #include "GameConfig.hpp"
 #include "GamePhase.hpp"
 #include "RoundDifficulty.hpp"
@@ -11,9 +12,13 @@
 #include "field/FieldLayout.hpp"
 #include "persistence/HighScoreStore.hpp"
 #include "systems/CollisionSystem.hpp"
+#include "systems/DefenderExhaustionSystem.hpp"
+#include "systems/DefenderIntentSystem.hpp"
 #include "systems/DefenderMovementSystem.hpp"
 #include "systems/MovementSystem.hpp"
 #include "systems/PlayerInputSystem.hpp"
+#include "systems/PlayerVelocitySystem.hpp"
+#include "systems/StaminaSystem.hpp"
 #include <cstdint>
 #include <vector>
 
@@ -40,9 +45,17 @@ namespace game
 		void	updateRoundProgress();
 		void	updateCollisions();
 		void	enterGameOver();
+		void	renderPlayfield() const;
+		void	renderHud() const;
+		void	renderPlayerStaminaBar() const;
+		void	renderDefenderStaminaBar(engine::ecs::Entity defender) const;
+		void	renderLoading() const;
+		void	renderRoundCompleteOverlay() const;
+		void	renderGameOverOverlay() const;
 
 		field::FieldConfig					m_fieldConfig;
 		field::FieldGenerator				m_fieldGenerator;
+		engine::Random						m_enemyRandom;
 		persistence::HighScoreStore			m_highScoreStore{config::persistence::highScorePath};
 		field::FieldLayout					m_field;
 		World								m_world;
@@ -61,6 +74,10 @@ namespace game
 		bool								m_newHighScore{false};
 		bool								m_highScoreSaveFailed{false};
 		PlayerInputSystem					m_playerInputSystem;
+		DefenderIntentSystem				m_defenderIntentSystem;
+		StaminaSystem						m_staminaSystem;
+		DefenderExhaustionSystem			m_defenderExhaustionSystem;
+		PlayerVelocitySystem				m_playerVelocitySystem;
 		MovementSystem						m_movementSystem;
 		DefenderMovementSystem				m_defenderMovementSystem;
 		CollisionSystem						m_collisionSystem;

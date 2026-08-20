@@ -6,7 +6,9 @@ namespace game
 {
 	struct PlayerController
 	{
-		float	moveSpeed{140.0f};
+		float	walkSpeed{};
+		float	sprintSpeed{};
+		float	exhaustedSpeed{};
 	};
 }
 

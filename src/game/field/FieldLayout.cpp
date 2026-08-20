@@ -140,4 +140,12 @@ namespace game::field
 		}
 		return closestDistance;
 	}
+
+	float	distanceToLine(const FieldPolyline& polyline, Point2D point)
+	{
+		const float	distanceAlongLine = closestDistanceAlongLine(polyline, point);
+		const Point2D	closestPoint = pointAtDistance(polyline, distanceAlongLine);
+
+		return std::hypot(point.x - closestPoint.x, point.y - closestPoint.y);
+	}
 }

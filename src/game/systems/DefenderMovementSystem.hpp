@@ -10,12 +10,7 @@ namespace game
 	class DefenderMovementSystem
 	{
 	public:
-		void	update(
-			World& world,
-			const field::FieldLayout& field,
-			engine::ecs::Entity player,
-			float deltaTime
-		) const;
+		void	update(World& world, const field::FieldLayout& field, float deltaTime) const;
 	};
 }
 

@@ -6,12 +6,8 @@ namespace game
 {
 	void	PlayerInputSystem::update(World& world) const
 	{
-		world.each<PlayerController, Velocity2D>(
-			[](
-				engine::ecs::Entity,
-				const PlayerController& controller,
-				Velocity2D& velocity
-			)
+		world.each<MovementIntent2D, SprintState>(
+			[](engine::ecs::Entity, MovementIntent2D& intent, SprintState& sprint)
 			{
 				float	horizontal = 0.0f;
 				float	vertical = 0.0f;
@@ -25,18 +21,20 @@ namespace game
 				if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))
 					vertical += 1.0f;
 
-				const float lengthSquared = horizontal * horizontal + vertical * vertical;
+				const float	lengthSquared = horizontal * horizontal + vertical * vertical;
 
 				if (lengthSquared == 0.0f)
 				{
-					velocity = {};
+					intent = {};
+					sprint.requested = false;
 					return;
 				}
 
 				const float	inverseLength = 1.0f / std::sqrt(lengthSquared);
 
-				velocity.x = horizontal * inverseLength * controller.moveSpeed;
-				velocity.y = vertical * inverseLength * controller.moveSpeed;
+				intent.x = horizontal * inverseLength;
+				intent.y = vertical * inverseLength;
+				sprint.requested = IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT);
 			}
 		);
 	}

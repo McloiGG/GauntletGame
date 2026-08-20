@@ -12,6 +12,8 @@ namespace game
 		std::size_t	transverseLineCount{config::difficulty::baseTransverseLineCount};
 		float		enemySpeedMultiplier{config::difficulty::initialEnemySpeedMultiplier};
 		float		enemyStaminaMultiplier{config::difficulty::initialEnemyStaminaMultiplier};
+		float		enemyRecoveryMultiplier{config::difficulty::initialEnemyRecoveryMultiplier};
+		float		enemyOutcomeWeightShift{config::difficulty::initialEnemyOutcomeWeightShift};
 	};
 }
 

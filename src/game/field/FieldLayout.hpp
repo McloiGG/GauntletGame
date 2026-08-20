@@ -64,6 +64,7 @@ namespace game::field
 	const FieldPolyline*	tryGetLine(const FieldLayout& field, FieldLineId lineId);
 	Point2D	pointAtDistance(const FieldPolyline& polyline, float distance);
 	float	closestDistanceAlongLine(const FieldPolyline& polyline, Point2D point);
+	float	distanceToLine(const FieldPolyline& polyline, Point2D point);
 }
 
 #endif

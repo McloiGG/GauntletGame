@@ -4,6 +4,18 @@
 
 namespace engine
 {
+	std::uint32_t	deriveSeed(std::uint32_t baseSeed, std::uint32_t stream)
+	{
+		std::uint32_t	value = baseSeed ^ stream;
+
+		value ^= value >> 16;
+		value *= 0x7FEB352Du;
+		value ^= value >> 15;
+		value *= 0x846CA68Bu;
+		value ^= value >> 16;
+		return value;
+	}
+
 	Random::Random(std::uint32_t seed) : m_engine(seed) {}
 
 	int	Random::integer(int minimum, int maximum)

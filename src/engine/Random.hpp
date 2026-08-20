@@ -9,6 +9,8 @@
 
 namespace engine
 {
+	std::uint32_t	deriveSeed(std::uint32_t baseSeed, std::uint32_t stream);
+
 	class Random
 	{
 	public:
