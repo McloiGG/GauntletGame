@@ -23,7 +23,7 @@ namespace game::config
 		inline constexpr std::size_t	generationAttempts = 8;
 		inline constexpr float			comparisonTolerance = 0.001f;
 
-		inline constexpr float			lineVariationScale = 1.0f;
+		inline constexpr float			lineVariationScale = 2.5f;
 		inline constexpr std::size_t	baseInteriorPointCount = 1;
 		inline constexpr std::size_t	maximumInteriorPointCount = 5;
 		inline constexpr std::uint32_t	roundsPerAdditionalInteriorPoint = 3;
