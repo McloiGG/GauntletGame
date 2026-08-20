@@ -23,6 +23,7 @@ namespace game::config
 		inline constexpr std::size_t	generationAttempts = 8;
 		inline constexpr float			comparisonTolerance = 0.001f;
 
+		// 0 produces straight lines, 1 is the default, and values above 1 amplify variation.
 		inline constexpr float			lineVariationScale = 1.0f;
 		inline constexpr std::size_t	baseInteriorPointCount = 1;
 		inline constexpr std::size_t	maximumInteriorPointCount = 5;

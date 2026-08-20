@@ -3,6 +3,7 @@
 #define WORLD_HPP
 
 #include "components/CircleCollider2D.hpp"
+#include "components/LineFollower.hpp"
 #include "components/PlayerController.hpp"
 #include "components/Transform2D.hpp"
 #include "components/Velocity2D.hpp"
@@ -14,7 +15,8 @@ namespace game
 		Transform2D,
 		Velocity2D,
 		PlayerController,
-		CircleCollider2D
+		CircleCollider2D,
+		LineFollower
 	>;
 }
 
